@@ -1,0 +1,43 @@
+﻿<!---
+    File: add_shipping_package.cfm
+    Folder: Add_Ons\ezgi\e-pda\query
+    Author: Ezgi Yazılım
+    Date: 01/01/2007
+    Description:
+--->
+
+<cfif listlen(attributes.stock_id_list)>
+	<cfquery name="DELETE_PACKAGE_LIST" datasource="#DSN3#">
+		DELETE EZGI_SHIPPING_PACKAGE_LIST WHERE SHIPPING_ID = #attributes.SHIP_ID# AND TYPE = #attributes.is_type#
+	</cfquery>
+	<cfloop list="#attributes.stock_id_list#" index="sid">
+		<cfquery name="ADD_PACKAGE_LIST" datasource="#dsn3#">
+			INSERT INTO 
+                EZGI_SHIPPING_PACKAGE_LIST
+                (
+                    SHIPPING_ID,
+                    STOCK_ID,
+                    SPECT_MAIN_ID,
+                    AMOUNT,
+                    CONTROL_AMOUNT,
+                    CONTROL_STATUS,
+                    TYPE,
+                    RECORD_DATE,
+                    RECORD_EMP
+                )
+         	VALUES
+                (
+                    #attributes.SHIP_ID#,
+                    #ListGetAt(sid,1,'_')#,
+                    #ListGetAt(sid,2,'_')#,
+                    #Evaluate('attributes.amount#sid#')#,
+                    <cfif len(Evaluate('attributes.control_amount#sid#'))>#Evaluate('attributes.control_amount#sid#')#<cfelse>0</cfif>,
+                    2,
+                    #attributes.is_type#,
+                    #now()#,
+                    #session.ep.userid#
+                )
+		</cfquery>
+	</cfloop>
+</cfif>
+<cflocation url="#request.self#?fuseaction=pda.list_shipping&department_id=#department_id#&date1=#date1#&date2=#date2#&page=#page#&is_form_submitted=1&kontrol_status=2" addtoken="no">  

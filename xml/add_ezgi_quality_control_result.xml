@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OBJECT_PROPERTIES>
+	<OBJECT_PROPERTY>
+		<PROPERTY>x_qualite_control_confirmation</PROPERTY>
+		<PROPERTY_DETAIL>Kalite Kontrol Sonucu Girmesi Zorunlu Operasyon ID leri (ID lerin arası virgül olmalıdır)</PROPERTY_DETAIL>
+		<PROPERTY_TYPE>input</PROPERTY_TYPE>
+		<PROPERTY_VALUES></PROPERTY_VALUES>
+		<PROPERTY_NAMES></PROPERTY_NAMES>
+		<PROPERTY_DEFAULT></PROPERTY_DEFAULT>
+		<PROPERTY_HELP>Kalite Kontrol Sonucu Objesi Listelenen Operasyon ID lerinde Gelecektir.</PROPERTY_HELP>
+	</OBJECT_PROPERTY>
+    <OBJECT_PROPERTY>
+		<PROPERTY>x_photo_control</PROPERTY>		
+		<PROPERTY_DETAIL>Media Girişi Zorunlu Operasyon ID leri (ID lerin arası virgül olmalıdır)</PROPERTY_DETAIL>
+		<PROPERTY_TYPE>input</PROPERTY_TYPE>
+		<PROPERTY_VALUES></PROPERTY_VALUES>
+		<PROPERTY_NAMES></PROPERTY_NAMES>
+		<PROPERTY_DEFAULT></PROPERTY_DEFAULT>
+		<PROPERTY_HELP>Fotoğraf Çekme Objesi Listelenen Operasyon ID lerinde Gelecektir.</PROPERTY_HELP>
+	</OBJECT_PROPERTY>
+</OBJECT_PROPERTIES>

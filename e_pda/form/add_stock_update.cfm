@@ -1,0 +1,389 @@
+﻿<!---
+    File: add_stock_update.cfm
+    Folder: Add_Ons\ezgi\e-pda\form
+    Author: Ezgi Yazılım
+    Date: 01/01/2007
+    Description:
+--->
+
+<cfset default_fire_process_type = 112>
+<cfset default_sayim_process_type = 115>
+<cfquery name="get_default_departments" datasource="#dsn#">
+	SELECT        
+    	DEFAULT_MK_TO_RF_DEP, 
+        DEFAULT_MK_TO_RF_LOC
+	FROM            
+    	EZGI_PDA_DEPARTMENT_DEFAULTS
+	WHERE        
+    	EPLOYEE_ID = #session.ep.userid#
+</cfquery>
+<cfif not get_default_departments.recordcount>
+	<script type="text/javascript">
+		alert("<cf_get_lang dictionary_id='338.Default Depo Ayarları Yapılmamış'>! <cf_get_lang dictionary_id='29938.Sistem Yöneticisine Başvurun.'>");
+		history.back();	
+	</script>
+</cfif>
+<cfset default_departments = '#get_default_departments.DEFAULT_MK_TO_RF_DEP#'> <!---Depo seçiminde select satırına gelecek Lokasyonların depatmanları tanımlanır--->
+<cfparam name="attributes.department_in_id" default="#ListGetAt(get_default_departments.DEFAULT_MK_TO_RF_DEP,1)#-#ListGetAt(get_default_departments.DEFAULT_MK_TO_RF_LOC,1)#">
+<cfparam name="attributes.department_out_id" default="#ListGetAt(get_default_departments.DEFAULT_MK_TO_RF_DEP,2)#-#ListGetAt(get_default_departments.DEFAULT_MK_TO_RF_LOC,2)#">
+<cfquery name="GET_ALL_LOCATION" datasource="#DSN#">
+	SELECT 
+		D.DEPARTMENT_HEAD,
+		SL.DEPARTMENT_ID,
+		SL.LOCATION_ID,
+		SL.STATUS,
+		SL.COMMENT
+	FROM 
+		STOCKS_LOCATION SL,
+		DEPARTMENT D,
+		BRANCH B
+	WHERE
+		D.DEPARTMENT_ID IN (#default_departments#) AND
+		SL.DEPARTMENT_ID = D.DEPARTMENT_ID AND
+		SL.STATUS = 1 AND
+		D.BRANCH_ID = B.BRANCH_ID
+</cfquery>
+<cfquery name="get_process_cat_sayim" datasource="#DSN3#">
+	SELECT TOP (1)    
+    	SPC.PROCESS_CAT_ID
+	FROM         
+    	SETUP_PROCESS_CAT AS SPC INNER JOIN
+      	SETUP_PROCESS_CAT_FUSENAME AS SPCF ON SPC.PROCESS_CAT_ID = SPCF.PROCESS_CAT_ID INNER JOIN
+    	SETUP_PROCESS_CAT_ROWS AS SPCR ON SPC.PROCESS_CAT_ID = SPCR.PROCESS_CAT_ID
+	WHERE     
+    	SPC.PROCESS_TYPE = #default_sayim_process_type# AND 
+        SPCF.FUSE_NAME = 'pda.form_add_ambar_fis' 
+  	ORDER BY
+    	SPC.PROCESS_CAT_ID DESC      
+</cfquery>
+<cfif not get_process_cat_sayim.recordcount>
+	<script type="text/javascript">
+		alert("<cf_get_lang dictionary_id='29632.Sayım Fişi'> <cf_get_lang dictionary_id='333.İşlem Kategorisi Tanımlayınız!'>");
+		<!---history.back();	--->
+	</script>
+    <cfabort>
+</cfif>
+
+<cfquery name="get_process_cat_fire" datasource="#DSN3#">
+	SELECT TOP (1)    
+    	SPC.PROCESS_CAT_ID
+	FROM         
+    	SETUP_PROCESS_CAT AS SPC INNER JOIN
+      	SETUP_PROCESS_CAT_FUSENAME AS SPCF ON SPC.PROCESS_CAT_ID = SPCF.PROCESS_CAT_ID INNER JOIN
+    	SETUP_PROCESS_CAT_ROWS AS SPCR ON SPC.PROCESS_CAT_ID = SPCR.PROCESS_CAT_ID
+	WHERE     
+    	SPC.PROCESS_TYPE = #default_fire_process_type# AND 
+        SPCF.FUSE_NAME = 'pda.form_add_ambar_fis' 
+  	ORDER BY
+    	SPC.PROCESS_CAT_ID DESC      
+</cfquery>
+<cfif not get_process_cat_fire.recordcount>
+	<script type="text/javascript">
+		alert("<cf_get_lang dictionary_id='29629.Fire Fişi'> <cf_get_lang dictionary_id='333.İşlem Kategorisi Tanımlayınız!'>");
+		<!---history.back();	--->
+	</script>
+    <cfabort>
+</cfif>
+<style type="text/css">
+.boxtext {
+	text-decoration: none;
+	margin: 0px;
+	padding: 0px;
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+}
+.tablo {
+	text-decoration: none;
+	margin: 0px;
+	padding: 0px;
+	border-top-width: 1px;
+	border-right-width: 0px;
+	border-bottom-width: 1px;
+	border-left-width: 0px;
+	border-top-color: aec7f0;
+	border-right-color: aec7f0;
+	border-bottom-color: aec7f0;
+	border-left-color: aec7f0;
+}
+</style>
+<script language="javascript" type="text/javascript">
+  var row_count = 0;
+  var barcod = '';
+  var stock_id = '';
+  var spectmainid = '';
+  var stockcode = '';
+  var amount = '';
+  var ekle = 0;
+  var cikar = 0;
+  var islemtipi = 0;//0-ekle 1-çıkar
+  var buton = 0;// <1-buton pasif, >0-buton aktif
+</script>
+<cfform name="add_stock_count" id="add_stock_count" method="post" action="" enctype="multipart/form-data"> 
+	<div class="col col-12 col-md-12 col-sm-12 col-xs-12">
+    	<cf_box scroll="0">
+          	<cfinput id="sayim_process_cat_id" type="hidden" name="sayim_process_cat_id" value="#get_process_cat_sayim.process_cat_id#">
+  			<cfinput id="fire_process_cat_id" type="hidden" name="fire_process_cat_id" value="#get_process_cat_fire.process_cat_id#">
+            <input type="hidden" id="department_in_id" name="department_in_id" value="" />
+          	<input type="hidden" name="kuponlist" value="" />
+          	<input type="hidden" name="active_period" value="#session.pda.period_id#" />
+            <cf_box_search>
+            	<div class="col col-12">
+                	<div class="col col-2">
+                    	<cf_get_lang dictionary_id='57635.Miktar'>
+                    </div>
+                	<div class="col col-5">
+                    	<cf_get_lang dictionary_id='57633.Barkod'>
+                    </div>
+                    <div class="col col-5">
+                    	<cf_get_lang dictionary_id='36714.Raf'>
+                    </div>
+              	</div>
+                <div class="col col-12">
+                	<div class="col col-2">
+                    	<div class="form-group">
+                            <cfinput id="add_other_amount" name="add_other_amount" type="text" onfocus="islemtipi=0;" style=" text-align:right" maxlength="6" value="0" />
+                    	</div>
+                    </div>
+                	<div class="col col-5">
+                    	<div class="form-group">
+                            <cfinput id="add_other_barcod" name="add_other_barcod" type="text"  maxlength="20" value="" />
+                        </div>
+                    </div>
+                    <div class="col col-5">
+                    	<div class="form-group">
+                            <cfinput id="raf" name="raf" type="text" onfocus="islemtipi=0;"  maxlength="20" value="" />
+                        </div>
+                    </div>
+               	</div>
+          	</cf_box_search>
+        </cf_box>
+        <cfsavecontent variable="title"><cf_get_lang dictionary_id="87.Depo Düzenleme"></cfsavecontent>
+       	<cf_box title="#title#" uidrop="1" hide_table_column="1" scroll="1">
+            <cf_form_list>
+                <thead>
+                    <tr>
+                    	<th style="width:10%"><cf_get_lang dictionary_id='58577.Sıra'></th>
+                        <th style="width:100%"><cf_get_lang dictionary_id='57633.Barkod'></th>
+                        <th style="width:15%"><cf_get_lang dictionary_id='57635.Miktar'></th>
+                        <th style="width:15%"><cf_get_lang dictionary_id='32041.Sayım'></th>
+                        <th style="width:15%"><cf_get_lang dictionary_id='57684.Sonuç'></th>
+                    </tr>
+                </thead>
+                <form name="product_row" id="product_row" method="post">
+                    <tbody name="table1" id="table1">
+                    </tbody>
+                </form>
+                <tfoot>
+                    <tr>	
+                        <td colspan="5">
+                            <input type="hidden" id="department_in_id" name="department_in_id" value="" />
+                            <input type="hidden" id="row_count" name="row_count" value="0" />
+                            <input type="hidden" id="action_id" name="action_id" value="" />
+                            <input style="display:none" id="onay" name="Onay" value="<cf_get_lang dictionary_id="57461.Kaydet">" type="button" disabled="disabled" onClick="kontrol_kayit();" />
+                        </td>
+                    </tr>
+                </tfoot>
+            </cf_form_list>
+        </cf_box>
+    </div>
+</cfform>
+<script language="javascript" type="text/javascript">
+	document.getElementById('add_other_amount').select();
+	function buton_kontrol()
+	{
+		if (islemtipi == 0)
+			buton++;
+		else if (buton>0)
+			buton--;
+		if (buton < 1)
+			document.getElementById('onay').disabled = true;
+		else
+			document.getElementById('onay').disabled = false;
+	}
+	
+	function get_stock(barcode)
+    {
+	 	barcod = ''; stock_id = ''; stockcode = ''; spectmainid = ''; //ilk önce sıfırlıyoruz
+	 	k_= 0;
+	 	if (k_ == 0)
+     	{
+			/*var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";*/
+		 	/*var get_product = wrk_query(new_sql,'dsn3');*/
+			
+			var listParam = barcode;
+			var get_product = wrk_safe_query('get_product_ezgi','dsn3',0,listParam);
+			
+		 	if (get_product.STOCK_ID == undefined)
+		 	{
+				k_=1;
+				alert('<cf_get_lang dictionary_id='341.Ürün Bulunamadı'>');
+		 	}
+		 	else
+		 	{	
+				stock_id = get_product.STOCK_ID;
+				stockcode = get_product.PRODUCT_NAME;
+				barcode = get_product.BARCODE;
+				document.getElementById('raf').focus();
+				buton_kontrol();
+    		}
+		}
+		else
+		{
+			barcod = ''; stock_id = ''; stockcode = ''; spectmainid = '';
+			return false;
+		}
+	}
+
+	function add_amount()
+	{
+		/*var stock_sql = "SELECT ISNULL(S.REAL_STOCK, 0) AS PRODUCT_STOCK FROM GET_STOCK_LAST_SHELF AS S INNER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS P ON S.SHELF_NUMBER = P.PRODUCT_PLACE_ID WHERE P.SHELF_CODE = '"+document.getElementById('raf').value+"' AND S.STOCK_ID ="+stock_id;*/
+		/*var get_real_stock = wrk_query(stock_sql,'dsn2');*/
+		
+		var listParam = document.getElementById('raf').value + "*" + stock_id;
+		var get_real_stock = wrk_safe_query('get_amount_stock_id_depo_ezgi','dsn2',0,listParam);
+		
+		
+		if(get_real_stock.recordcount)
+			depo_miktar = get_real_stock.PRODUCT_STOCK;
+		else
+			depo_miktar = 0;
+	}
+	
+	function add_row(barcode)
+	{
+		{
+			  amount = document.getElementById('add_other_amount').value;
+			  add_amount();
+			  sonuc = amount-depo_miktar;
+			  if (ekle == 0)
+			  {
+				row_count++;
+				document.getElementById('row_count').value = row_count;
+				var newRow;
+				var newCell;	
+				newRow = document.getElementById("table1").insertRow(document.getElementById("table1").rows.length);
+				newRow.setAttribute("name","frm_row" + row_count);
+				newRow.setAttribute("id","frm_row" + row_count);		
+				newRow.setAttribute("NAME","frm_row" + row_count);
+				newRow.setAttribute("ID","frm_row" + row_count);		
+				
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input style="text-align:right" type="text" value="'+row_count+'" name="satir" id="satir" size="2" class="boxtext" readonly="yes" />'
+				
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="hidden" value="'+stock_id+'" name="stock_id'+row_count+'" id="stock_id'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input style="text-align:center" type="text" value="'+barcode+'" name="barcod'+row_count+'" id="barcod'+row_count+'" size="18" class="boxtext" readonly="yes" />';
+				
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="text" style="text-align:right" value="'+depo_miktar+'" name="old_amount'+row_count+'" id="old_amount'+row_count+'" size="7" class="boxtext" readonly="yes" />';
+				
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="text" style="text-align:right" value="'+amount+'" name="new_amount'+row_count+'" id="new_amount'+row_count+'" size="7" class="boxtext" readonly="yes"  style="text-align:" />';
+				
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="text" value="'+sonuc+'" name="calc_amount'+row_count+'" id="calc_amount'+row_count+'" size="7" class="boxtext" readonly="yes" style="text-align:right" />';
+			  }
+			  else
+			  {
+				 ekle = 0;
+			  }
+			  document.getElementById('onay').style.display = '';
+			  document.getElementById('raf').style.display = 'none';
+			  document.getElementById('add_other_amount').style.display = 'none';
+			  document.getElementById('add_other_barcod').style.display = 'none';
+		}
+	}
+	function include(arr, obj) 
+	{
+    	for(var i=0; i<arr.length; i++) 
+		{
+        	if (arr[i] == obj) return true;
+    	}
+	}
+</script>
+
+<script language="JavaScript">
+	document.onkeydown = checkKeycode
+	function checkKeycode(e) 
+	{
+		var keycode;
+		if (window.event) keycode = window.event.keyCode;
+		else if (e) keycode = e.which;
+		if (keycode == 13)
+		{
+			if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('raf').value.length >0)
+			{
+				alert('<cf_get_lang dictionary_id='340.Önce Ürün Barkodu Okutunuz'>');
+				document.getElementById('add_other_barcod').value = '';
+				document.getElementById('raf').value = '';
+				document.getElementById('add_other_amount').value = 1;
+				document.getElementById('add_other_barcod').focus();	
+			
+			}
+			else
+			{
+				if (document.getElementById('add_other_barcod').value.length >0 && document.getElementById('raf').value.length >0)	
+				search_shelf(document.getElementById('raf').value);
+				else
+				get_stock(document.getElementById('add_other_barcod').value);
+			}
+		}
+	}
+	function search_shelf(shelf_8)
+	{
+		/*var shelf_sql = "SELECT SHELF_TYPE, PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '"+shelf_8+"'";*/
+		/*var get_shelf = wrk_query(shelf_sql,'dsn3');*/
+		
+		var listParam = shelf_8;
+		var get_shelf = wrk_safe_query('get_amount_shelf_amount_ezgi','dsn3',0,listParam);
+		
+		if(get_shelf.recordcount)
+		{
+			if(get_shelf.SHELF_TYPE == 1)
+			{
+				/*var new_sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.BARCODE = '"+document.getElementById('add_other_barcod').value+"' AND PP.SHELF_CODE ='"+document.getElementById('raf').value+"'";
+				var get_product = wrk_query(new_sql,'dsn3');*/
+
+				var listParam = document.getElementById('add_other_barcod').value + "*" + document.getElementById('raf').value;
+				var get_product = wrk_safe_query('get_product_by_shelf_code_ezgi','dsn3',0,listParam);
+				
+				if (get_product.STOCK_ID == undefined)
+				{
+					alert('<cf_get_lang dictionary_id='346.Ürün Bu Rafa Tanıtılmamış'>');
+					document.getElementById('raf').value = '';
+					document.getElementById('raf').focus();
+				}
+				else
+				{
+					var cikis_depo = get_shelf.STORE_ID+'-'+get_shelf.LOCATION_ID;
+					document.getElementById('department_in_id').value = cikis_depo;
+					add_row(document.getElementById('add_other_barcod').value);
+				}
+			}
+			else
+			{
+				var cikis_depo = get_shelf.STORE_ID+'-'+get_shelf.LOCATION_ID;
+				document.getElementById('department_in_id').value = cikis_depo;
+				add_row(document.getElementById('add_other_barcod').value);
+			}
+		}
+		else
+		{
+			alert('<cf_get_lang dictionary_id='348.Seçtiğiniz Raf Hiç Tanımlanmamış'>!');
+			document.getElementById('raf').value = '';
+			document.getElementById('raf').focus();
+		}
+	}
+	function kontrol_kayit()
+	{
+		sor=confirm('<cf_get_lang dictionary_id='362.Kaydetmek İstiyor Musunuz?'>');
+		if (sor == true)
+		{
+			document.getElementById("add_stock_count").action = "<cfoutput>#request.self#</cfoutput>?fuseaction=pda.emptypopup_add_ezgi_stock_update_file";
+			document.getElementById("add_stock_count").submit();
+		}
+		else
+		return false;
+	}
+</script>

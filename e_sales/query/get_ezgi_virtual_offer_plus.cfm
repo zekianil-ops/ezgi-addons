@@ -1,0 +1,8 @@
+<cfquery name="GET_VIRTUAL_OFFER_PLUS" datasource="#dsn3#">
+	SELECT
+		*
+	FROM
+		EZGI_VIRTUAL_OFFER_PLUS
+	WHERE
+		VIRTUAL_OFFER_PLUS_ID = #VIRTUAL_OFFER_PLUS_ID#
+</cfquery>

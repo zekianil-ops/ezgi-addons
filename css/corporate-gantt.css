@@ -1,0 +1,56 @@
+﻿/* -----------------------------------------------------------
+   CORPORATE GANTT CHART DESIGN
+   -----------------------------------------------------------*/
+
+/* Gantt container */
+#example5\.3 {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid var(--corporate-border);
+    padding: 10px 6px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+/* Timeline satır yüksekliği */
+.google-visualization-table-tr-head,
+.google-visualization-table-tr {
+    height: 32px !important;
+}
+
+/* Timeline grid çizgileri */
+.google-visualization-timeline {
+    border: none !important;
+}
+
+/* Blokların köşeleri yuvarlak */
+.google-visualization-timeline-bar {
+    border-radius: 6px !important;
+}
+
+/* Kurumsal renkler */
+.google-visualization-timeline-bar[style*="orange"] {
+    background: var(--corporate-accent) !important;
+}
+.google-visualization-timeline-bar[style*="green"] {
+    background: var(--corporate-green) !important;
+}
+.google-visualization-timeline-bar[style*="red"] {
+    background: var(--corporate-red) !important;
+}
+
+/* Yazıları okuyabilir yapma */
+.google-visualization-timeline-label {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: var(--corporate-text) !important;
+}
+
+/* Tooltip daha kurumsal */
+.google-visualization-tooltip {
+    background: #ffffff !important;
+    border: 1px solid var(--corporate-border) !important;
+    border-radius: 8px !important;
+    font-size: 12px !important;
+    padding: 8px 10px !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important;
+}

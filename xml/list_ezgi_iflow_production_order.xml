@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OBJECT_PROPERTIES>
+	<OBJECT_PROPERTY>
+		<PROPERTY>x_list_sort</PROPERTY>
+		<PROPERTY_DETAIL>Sıralama Default Değeri</PROPERTY_DETAIL>
+		<PROPERTY_TYPE>select</PROPERTY_TYPE>
+		<PROPERTY_VALUES>1,2,3,4,5,6,7,8</PROPERTY_VALUES>
+		<PROPERTY_NAMES>Ürün Adına Göre Artan,Ürün Adına Göre Azalan,Emir Nosuna Göre Artan,Emir Nosuna Göre Azalan,Emir Tarihine Göre Artan,Emir Tarihine Göre Azalan,Üretim Sıra No,Renk</PROPERTY_NAMES>
+		<PROPERTY_DEFAULT>7</PROPERTY_DEFAULT>
+		<PROPERTY_HELP></PROPERTY_HELP>
+	</OBJECT_PROPERTY>
+</OBJECT_PROPERTIES>

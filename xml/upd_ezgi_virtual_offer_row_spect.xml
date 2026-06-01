@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OBJECT_PROPERTIES>
+	<OBJECT_PROPERTY>
+		<PROPERTY>x_import_update_info</PROPERTY>
+		<PROPERTY_DETAIL>Transfer Edilen Satış Fiyat Dosyasına Ait Bilgiler Değişebilsin</PROPERTY_DETAIL>
+		<PROPERTY_TYPE>select</PROPERTY_TYPE>
+		<PROPERTY_VALUES>1,0</PROPERTY_VALUES>
+		<PROPERTY_NAMES>Evet,Hayır</PROPERTY_NAMES>
+		<PROPERTY_DEFAULT>1</PROPERTY_DEFAULT>
+		<PROPERTY_HELP>Eğer evet olarak seçilirse Aktarımla Gelen Satırlar Silinebilir ve Değişebilir.</PROPERTY_HELP>
+	</OBJECT_PROPERTY>
+	<OBJECT_PROPERTY>
+		<PROPERTY>x_upgrade_demand</PROPERTY>
+		<PROPERTY_DETAIL>İşlendi Olan Satır İçin Revizyon Talebi Yapılacak Çalışan ID Girin</PROPERTY_DETAIL>
+		<PROPERTY_TYPE>input</PROPERTY_TYPE>
+		<PROPERTY_VALUES></PROPERTY_VALUES>
+		<PROPERTY_NAMES></PROPERTY_NAMES>
+		<PROPERTY_DEFAULT></PROPERTY_DEFAULT>
+		<PROPERTY_HELP>Eğer ID girişi Yapılırsa RevizYon Talep Butonu Gelir. Revizyon Talep İstemi Yapılacak Çalışanların EMP Id lerini Girin. Örnek: 2,55,41</PROPERTY_HELP>
+	</OBJECT_PROPERTY>
+</OBJECT_PROPERTIES>

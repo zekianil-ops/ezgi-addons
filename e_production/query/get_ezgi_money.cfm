@@ -1,0 +1,9 @@
+<cfquery name="GET_MONEY" datasource="#DSN#">
+	SELECT
+		*
+	FROM
+		SETUP_MONEY
+	WHERE
+		PERIOD_ID = #SESSION.EP.PERIOD_ID# AND
+		COMPANY_ID = #SESSION.EP.COMPANY_ID#
+</cfquery>

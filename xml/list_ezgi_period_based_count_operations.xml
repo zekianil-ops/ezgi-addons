@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OBJECT_PROPERTIES>
+	  <OBJECT_PROPERTY>
+		<PROPERTY>x_cadde</PROPERTY>
+		<PROPERTY_DETAIL>Cadde Kodu Karekter Sayısı</PROPERTY_DETAIL>
+		<PROPERTY_TYPE>input</PROPERTY_TYPE>
+		<PROPERTY_VALUES></PROPERTY_VALUES>
+		<PROPERTY_NAMES></PROPERTY_NAMES>
+		<PROPERTY_DEFAULT>5</PROPERTY_DEFAULT>
+		<PROPERTY_HELP>Raflarda Caddeyi belirten Karakterlerin Sol Baştan Hücre Kodlarına Kadar Toplam Karakter Sayısı</PROPERTY_HELP>
+	</OBJECT_PROPERTY>
+</OBJECT_PROPERTIES>

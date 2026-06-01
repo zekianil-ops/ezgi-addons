@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OBJECT_PROPERTIES>
+	<OBJECT_PROPERTY>
+		<PROPERTY>x_select_control</PROPERTY>
+		<PROPERTY_DETAIL>Dönem İhtiyacı Kaynağı</PROPERTY_DETAIL>
+		<PROPERTY_TYPE>select</PROPERTY_TYPE>
+		<PROPERTY_VALUES>1,2,3</PROPERTY_VALUES>
+		<PROPERTY_NAMES>Satış Faturaları,Kota Bilgileri,Minimum Stok Bilgisi</PROPERTY_NAMES>
+		<PROPERTY_DEFAULT>1</PROPERTY_DEFAULT>
+		<PROPERTY_HELP>Tahminleme Yaparken Dönem İhtiyacı Sütununa Gelecek Bilginin Hangi Kaynaktan Alınacağını Belirler</PROPERTY_HELP>
+	</OBJECT_PROPERTY>
+	<OBJECT_PROPERTY>
+		<PROPERTY>x_select_calc_yontem</PROPERTY>
+		<PROPERTY_DETAIL>Demento Ürün Üretim Hesaplama Şekli</PROPERTY_DETAIL>
+		<PROPERTY_TYPE>select</PROPERTY_TYPE>
+		<PROPERTY_VALUES>1,2</PROPERTY_VALUES>
+		<PROPERTY_NAMES>Maximum,Minimum</PROPERTY_NAMES>
+		<PROPERTY_DEFAULT>1</PROPERTY_DEFAULT>
+		<PROPERTY_HELP>Tahminleme Yaparken Üretimden Gelecek Demonte Ürün Paketlerinin Maximum veya Minimum Miktarlarını Seçer</PROPERTY_HELP>
+	</OBJECT_PROPERTY>
+	<OBJECT_PROPERTY>
+		<PROPERTY>x_select_order_yontem</PROPERTY>
+		<PROPERTY_DETAIL>Demonte Ürün Sipariş Hesaplama Şekli</PROPERTY_DETAIL>
+		<PROPERTY_TYPE>select</PROPERTY_TYPE>
+		<PROPERTY_VALUES>1,2</PROPERTY_VALUES>
+		<PROPERTY_NAMES>Demonte Ürün Bazında ,Demonte Ürün Alt Kırılım Bazında</PROPERTY_NAMES>
+		<PROPERTY_DEFAULT>2</PROPERTY_DEFAULT>
+		<PROPERTY_HELP>1 Seçilirse Demonte Ürünleri Toplayarak Hesaplar 2 Seçilirse Demonte Ürünleri Parçalayarak Ortak Paketlerin Üzerinden Hesaplar</PROPERTY_HELP>
+	</OBJECT_PROPERTY>
+</OBJECT_PROPERTIES>

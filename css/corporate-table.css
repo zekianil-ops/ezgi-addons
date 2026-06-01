@@ -1,0 +1,87 @@
+﻿/* -----------------------------------------------------------
+   CORPORATE TABLE DESIGN
+   -----------------------------------------------------------*/
+
+.table-corporate {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    background: white;
+}
+
+/* Table Header Band (Ana kolonlar) */
+.table-corporate thead tr.main-header th {
+    background: var(--corporate-primary);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 6px;
+    text-align: center;
+}
+
+/* İstasyon üst bandı */
+.table-corporate thead tr.station-group th {
+    background: #e5e7eb;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--corporate-text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 6px 4px;
+}
+
+/* İstasyon alt kolonları */
+.table-corporate thead tr.station-columns th {
+    background: #f3f4f6;
+    border-bottom: 1px solid var(--corporate-border);
+    font-size: 11px;
+    padding: 6px 4px;
+    white-space: nowrap;
+}
+
+/* Satırlar */
+.table-corporate tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.table-corporate tbody tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+/* Hover etkisi */
+.table-corporate tbody tr:hover {
+    background: #eff6ff;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* Hücre stilleri */
+.table-corporate td {
+    padding: 6px 5px;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.td-center { text-align: center; }
+.td-right  { text-align: right; }
+.td-left   { text-align: left; }
+
+/* İç hücre kart tasarımı (Operasyonlar) */
+.operation-cell {
+    font-size: 11px;
+    line-height: 1.25;
+    padding: 4px 6px;
+    border-radius: 8px;
+    background: #fff8e7;
+    border: 1px solid #fcd34d;
+}
+
+.operation-cell.green {
+    background: #dcfce7;
+    border-color: #16a34a;
+}
+
+.operation-cell.red {
+    background: #fee2e2;
+    border-color: #dc2626;
+}
