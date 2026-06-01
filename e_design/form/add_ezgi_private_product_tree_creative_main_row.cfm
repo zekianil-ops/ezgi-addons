@@ -5,6 +5,7 @@
     Date: 01/01/2007
     Description:
 --->
+<cf_xml_page_edit>
 <cfparam name="attributes.keyword" default="">
 <cfparam name="attributes.list_type" default="1">
 <cfparam name="attributes.page" default=1>
